@@ -12,6 +12,7 @@ function App() {
   const [weather, setWeather] = useState();
   const [temp, setTemp] = useState();
   const [isloading, setIsLoading] = useState(true)
+  const [hasError, setHasError] = useState(false)
  
 
   const success = (info) => {
@@ -22,9 +23,10 @@ function App() {
   };
   const error = () =>{
     setIsLoading(false)
+    setHasError(true)
   }
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(success);
+    navigator.geolocation.getCurrentPosition(success, error);
   }, []);
 
   useEffect(() => {
@@ -51,12 +53,16 @@ function App() {
     <div className="app">
     
       {
-
-        isloading
+        hasError
+        ?<Error/>
+        :(
+          isloading
         ?<Loader/>
         :(
          <WeatherCard temp={temp} weather={weather} />
         )
+        )
+       
        
 
       }
